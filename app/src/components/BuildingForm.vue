@@ -3,6 +3,14 @@
     <h2>Building creation</h2>
     <form @submit.prevent="submitForm">
       <div class="form-group">
+        <label for="name">Name :</label>
+        <input
+            type="text"
+            id="name"
+            v-model="formData.name"
+        />
+      </div>
+      <div class="form-group">
         <label for="coordinates_latitude">Latitude :</label>
         <input
             type="number"

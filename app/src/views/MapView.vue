@@ -1,22 +1,34 @@
 <template>
-  <div id="map" style="height: 400px;"></div>
-  <button @click="getCalls">Add call</button>
-  <button @click="toogleAddBuilding">Add building</button>
-  <building-form
-      v-if="addBuilding"
-      :form-data="formData"
-      :type-list="typeList"
-      @submit-form="submitForm">
-  </building-form>
+  <div id="page">
+    <div id="actions">
+      <div id="map"></div>
+      <button @click="getCalls">Add call</button>
+      <button @click="toggleAddBuilding">Add building</button>
+    </div>
+    <div id="content">
+      <building-form
+          v-if="addBuilding"
+          :form-data="formData"
+          :type-list="typeList"
+          @submit-form="submitForm">
+      </building-form>
+      <BuildingInfos
+          v-if="selectedBuilding != null"
+          :building="selectedBuilding"
+      >
+      </BuildingInfos>
+    </div>
+  </div>
 </template>
 
 <script>
 import L from 'leaflet';
 import axios from 'axios';
 import BuildingForm from "../components/BuildingForm.vue";
+import BuildingInfos from "../components/BuildingInfos.vue";
 
 export default {
-  components: {BuildingForm},
+  components: {BuildingInfos, BuildingForm},
   data() {
     return {
       map: null,
@@ -25,15 +37,18 @@ export default {
       buildingMarkersLayer: null,
       addBuilding: false,
       formData: {
+        name: "",
         coordinates_latitude: 0,
         coordinates_longitude: 0,
-        type_id: 0,
+        type_id: 1,
       },
-      typeList: null
+      typeList: null,
+      selectedBuilding: null
     };
   },
   mounted() {
     this.map = L.map('map').setView([44.5833, -0.0333], 13);
+    console.log(this.selectedBuilding);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -72,13 +87,18 @@ export default {
               const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
               marker.bindPopup(building.type.name);
               this.buildingMarkersLayer.addLayer(marker);
+
+              marker.on('click', function(e) {
+                this.selectedBuilding = building;
+                console.log(this.selectedBuilding);
+              }.bind(this));
             });
           })
           .catch(error => {
             console.error('Error:', error);
           });
     },
-    toogleAddBuilding(){
+    toggleAddBuilding(){
       if (!this.addBuilding) {
         axios.get('http://127.0.0.1:8000/buildings-types/')
             .then(response => {
@@ -114,6 +134,7 @@ export default {
             const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
             marker.bindPopup(building.type.name);
             this.buildingMarkersLayer.addLayer(marker);
+            this.selectedBuilding = building;
 
             this.typeList = null;
             this.addBuilding = !this.addBuilding;
@@ -128,6 +149,23 @@ export default {
 </script>
 
 <style>
+#page {
+  display: flex;
+}
+
+#actions {
+  flex: 1;
+}
+
+#content {
+  flex: 1;
+}
+
+#map {
+  width: 100%;
+  height: 600px;
+}
+
 /* Style général du formulaire */
 form {
   width: 300px;
