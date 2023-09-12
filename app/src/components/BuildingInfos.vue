@@ -41,9 +41,9 @@ export default {
   },
   methods: {
     toggleVehicleList(){
-      axios.get('http://127.0.0.1:8000/buildings/' + this.building.id + '/vehicles')
+      axios.get('http://127.0.0.1:8000/vehicles/from-building/' + this.building.id)
           .then(response => {
-            this.vehicles = response.data;
+            this.vehicles = response.data.results;
           })
           .catch(error => {
             console.error('Error:', error);
@@ -51,14 +51,13 @@ export default {
       this.page = "vehicle"
     },
     toggleStaffList(){
-      axios.get('http://127.0.0.1:8000/buildings/' + this.building.id + '/staffs')
+      axios.get('http://127.0.0.1:8000/staffs/from-building/' + this.building.id)
           .then(response => {
-            this.staffs = response.data;
+            this.staffs = response.data.results;
           })
           .catch(error => {
             console.error('Error:', error);
           });
-      this
       this.page = "staff"
 
     }
