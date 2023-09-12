@@ -2,47 +2,26 @@
   <div id="map" style="height: 400px;"></div>
   <button @click="getCalls">Add call</button>
   <button @click="toogleAddBuilding">Add building</button>
-  <div v-if="addBuilding">
-      <h2>Building creation</h2>
-      <form @submit.prevent="submitForm">
-        <div class="form-group">
-          <label for="coordinates_latitude">Latitude :</label>
-          <input
-              type="number"
-              step="0.000001"
-              id="coordinates_latitude"
-              v-model="formData.coordinates_latitude"
-          />
-        </div>
-        <div class="form-group">
-          <label for="coordinates_longitude">Longitude :</label>
-          <input
-              type="number"
-              step="0.000001"
-              id="coordinates_longitude"
-              v-model="formData.coordinates_longitude"
-          />
-        </div>
-        <div class="form-group">
-          <label for="type_id">Type :</label>
-          <select id="type_id" v-model="formData.type_id">
-            <option v-for="type in type_list" :value="type.id">{{ type.name }}</option>
-          </select>
-        </div>
-        <button type="submit">Soumettre</button>
-      </form>
-  </div>
+  <building-form
+      v-if="addBuilding"
+      :form-data="formData"
+      :type-list="typeList"
+      @submit-form="submitForm">
+  </building-form>
 </template>
 
 <script>
 import L from 'leaflet';
 import axios from 'axios';
+import BuildingForm from "../components/BuildingForm.vue";
 
 export default {
+  components: {BuildingForm},
   data() {
     return {
       map: null,
       callMarkersLayer: null,
+      addingMarkersLayer: null,
       buildingMarkersLayer: null,
       addBuilding: false,
       formData: {
@@ -50,7 +29,7 @@ export default {
         coordinates_longitude: 0,
         type_id: 0,
       },
-      type_list: null
+      typeList: null
     };
   },
   mounted() {
@@ -61,6 +40,7 @@ export default {
     }).addTo(this.map);
 
     this.callMarkersLayer = L.layerGroup().addTo(this.map);
+    this.addingMarkersLayer = L.layerGroup().addTo(this.map);
     this.buildingMarkersLayer = L.layerGroup().addTo(this.map);
 
     this.getBuildings();
@@ -70,7 +50,6 @@ export default {
       axios.get('http://127.0.0.1:8000/calls/')
           .then(response => {
             const calls = response.data.results;
-            console.log(calls);
             calls.forEach(call => {
               const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
               marker.bindPopup("  " +
@@ -100,19 +79,30 @@ export default {
           });
     },
     toogleAddBuilding(){
-
       if (!this.addBuilding) {
         axios.get('http://127.0.0.1:8000/buildings-types/')
             .then(response => {
-              this.type_list = response.data.results;
+              this.typeList = response.data.results;
               this.addBuilding = !this.addBuilding;
+
+              const center = this.map.getCenter();
+              this.formData.coordinates_latitude = center.lat.toFixed(8);
+              this.formData.coordinates_longitude = center.lng.toFixed(8);
+              const marker = L.marker([this.formData.coordinates_latitude, this.formData.coordinates_longitude], { draggable: true }).addTo(this.map);
+              this.addingMarkersLayer.addLayer(marker);
+              marker.on('dragend', (event) => {
+                const markerLatLng = marker.getLatLng();
+                this.formData.coordinates_latitude = markerLatLng.lat.toFixed(8);
+                this.formData.coordinates_longitude = markerLatLng.lng.toFixed(8);
+              });
             })
             .catch(error => {
               console.error('Error:', error);
             });
       }else{
-        this.type_list = null;
+        this.typeList = null;
         this.addBuilding = !this.addBuilding;
+        this.addingMarkersLayer.clearLayers();
       }
 
     },
@@ -124,6 +114,10 @@ export default {
             const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
             marker.bindPopup(building.type.name);
             this.buildingMarkersLayer.addLayer(marker);
+
+            this.typeList = null;
+            this.addBuilding = !this.addBuilding;
+            this.addingMarkersLayer.clearLayers();
           })
           .catch((error) => {
             console.error('Erreur lors de la requête :', error);
