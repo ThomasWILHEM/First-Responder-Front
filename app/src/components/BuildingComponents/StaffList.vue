@@ -9,6 +9,7 @@
 export default {
   props: {
     staffsList: Object,
+    building: Object,
   },
   data(){
     return {

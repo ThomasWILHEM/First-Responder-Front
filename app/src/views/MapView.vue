@@ -1,22 +1,34 @@
 <template>
   <div id="page">
     <div id="actions">
-      <div id="map"></div>
-      <button @click="getCalls">Add call</button>
+      <div id="map">
+        <div class="map-controls">
+          <button @click="toggleAddBuilding">Add building</button>
+        </div>
+
+        <building-form
+            v-if="addBuilding"
+            :form-data="formData"
+            :type-list="typeList"
+            @submit-form="submitForm">
+        </building-form>
+      </div>
+
+      <!-- <button @click="getCalls">Add call</button>
       <button @click="toggleAddBuilding">Add building</button>
-    </div>
-    <div id="content">
-      <building-form
-          v-if="addBuilding"
-          :form-data="formData"
-          :type-list="typeList"
-          @submit-form="submitForm">
-      </building-form>
-      <BuildingInfos
-          v-if="selectedBuilding != null"
-          :building="selectedBuilding"
-      >
-      </BuildingInfos>
+          </div>
+          <div id="content">
+            <building-form
+                v-if="addBuilding"
+                :form-data="formData"
+                :type-list="typeList"
+                @submit-form="submitForm">
+            </building-form>
+            <BuildingInfos
+                v-if="selectedBuilding != null"
+                :building="selectedBuilding"
+            >
+            </BuildingInfos>-->
     </div>
   </div>
 </template>
@@ -38,6 +50,7 @@ export default {
       addBuilding: false,
       formData: {
         name: "",
+        address: "",
         coordinates_latitude: 0,
         coordinates_longitude: 0,
         type_id: 1,
@@ -114,6 +127,15 @@ export default {
                 const markerLatLng = marker.getLatLng();
                 this.formData.coordinates_latitude = markerLatLng.lat.toFixed(8);
                 this.formData.coordinates_longitude = markerLatLng.lng.toFixed(8);
+
+                axios.get(`https://nominatim.openstreetmap.org/reverse?lat=${this.formData.coordinates_latitude}&lon=${this.formData.coordinates_longitude}&format=json`)
+                    .then((response) => {
+                      const data = response.data;
+                      this.formData.address = data.display_name || 'Adresse non trouvée';
+                    })
+                    .catch((error) => {
+                      console.error('Erreur lors de la requête Axios :', error);
+                    });
               });
             })
             .catch(error => {
@@ -123,6 +145,13 @@ export default {
         this.typeList = null;
         this.addBuilding = !this.addBuilding;
         this.addingMarkersLayer.clearLayers();
+        this.formData= {
+          name: "",
+            address: "",
+            coordinates_latitude: 0,
+            coordinates_longitude: 0,
+            type_id: 1,
+        };
       }
 
     },
@@ -149,6 +178,15 @@ export default {
 </script>
 
 <style>
+.map-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+
+
 #page {
   display: flex;
 }
@@ -163,47 +201,7 @@ export default {
 
 #map {
   width: 100%;
-  height: 600px;
+  height: 90vh;
 }
 
-/* Style général du formulaire */
-form {
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-/* Style des étiquettes */
-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Style des champs de texte et des sélecteurs */
-input[type="number"],
-select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-}
-
-/* Style du bouton de soumission */
-button[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-/* Style du bouton de soumission au survol */
-button[type="submit"]:hover {
-  background-color: #0056b3;
-}
 </style>

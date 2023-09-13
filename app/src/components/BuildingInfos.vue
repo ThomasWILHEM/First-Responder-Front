@@ -17,6 +17,7 @@
     <StaffList
       v-else-if="page === 'staff'"
       :staffs-list="staffs"
+      :building="building"
     >
     </StaffList>
   </div>

@@ -11,7 +11,7 @@ import TheHeader from "./components/TheHeader.vue";
   <RouterView />
 </template>
 
-<style scoped>
+<style>
 header {
   line-height: 1.5;
   max-height: 100vh;
