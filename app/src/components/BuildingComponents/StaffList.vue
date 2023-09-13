@@ -1,6 +1,6 @@
 <template>
   <div v-for="staff in staffsList">
-    {{ staff.firstname }} {{ staff.lastname }}
+    {{ staff.firstname }} {{ staff.lastname }} - {{staff.type.name}}
   </div>
 </template>
 

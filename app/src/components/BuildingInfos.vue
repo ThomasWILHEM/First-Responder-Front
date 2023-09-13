@@ -11,6 +11,7 @@
     <VehicleList
       v-if="page === 'vehicle'"
       :vehicles-list="vehicles"
+      :building="building"
     >
     </VehicleList>
     <StaffList
@@ -37,6 +38,13 @@ export default {
       page: "",
       vehicles: [],
       staffs: []
+    }
+  },
+  watch:{
+    building: function (newBuilding, oldBuilding) {
+      this.vehicles = [];
+      this.staffs = [];
+      this.page = "";
     }
   },
   methods: {
