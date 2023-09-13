@@ -3,7 +3,9 @@
     <div id="actions">
       <div id="map">
         <div class="map-controls">
-          <button @click="toggleAddBuilding">Add building</button>
+          <button @click="toggleAddBuilding">
+            <img src="../assets/images/plus.png" alt="Add building">
+          </button>
         </div>
 
         <building-form
@@ -185,7 +187,26 @@ export default {
   z-index: 1000;
 }
 
+.map-controls button{
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 65px;
+  height: 65px;
+  background-color: #88282A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.map-controls button:hover{
+  background-color: #651f20;
+}
+
+.map-controls button img{
+  width: 45%;
+}
 
 #page {
   display: flex;
