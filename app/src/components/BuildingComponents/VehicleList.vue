@@ -1,11 +1,11 @@
 <template>
-  <div id="vehicle-list">
+  <div id="staff-list">
     <div id="title">
       <label>{{ title }}</label>
       <img @click="toggleVehicleCreation" :src="imageSrc" alt="Add a vehicle">
     </div>
     <div v-if="!isVehicleCreation" id=list>
-      <div v-for="vehicle in vehiclesList" class="vehicle">
+      <div v-for="vehicle in vehiclesList" class="staff">
         <label>
           {{vehicle.type.name}}
         </label>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import VehicleCreationForm from "./VehiclePartComponents/VehicleCreationForm.vue";
+import VehicleCreationForm from "./VehicleCreationForm.vue";
 import axios from "axios";
 
 export default {
@@ -55,10 +55,10 @@ export default {
       }
     },
     createVehicle(vehicle) {
-      console.log("oio");
       axios.post('http://127.0.0.1:8000/vehicles/', vehicle)
           .then(response => {
             this.vehiclesList.push(response.data);
+            this.isVehicleCreation = false;
           })
           .catch(error => {
             console.error('Error:', error);
@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style scoped>
-  #vehicle-list{
+  #staff-list{
     margin-top: 20px;
     background-color: #D9D9D9;
     border-radius: 10px;
@@ -97,7 +97,7 @@ export default {
     font-size: x-large;
   }
 
-  .vehicle{
+  .staff{
     display: flex;
     flex-direction: row;
     background-color: #651f20;
@@ -124,4 +124,5 @@ export default {
     font-weight: bold;
     font-size: medium;
   }
+
 </style>

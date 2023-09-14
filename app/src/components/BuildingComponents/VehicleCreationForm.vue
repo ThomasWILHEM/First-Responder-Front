@@ -1,5 +1,5 @@
 <template>
-  <div id="vehicle-creation">
+  <div id="staff-creation">
     <form @submit.prevent="createVehicle">
       <div class="form-group">
         <label for="type_id">Type </label>
@@ -64,7 +64,7 @@ export default {
   font-weight: bold;
 }
 
-#vehicle-creation{
+#staff-creation{
   margin: 10px;
 }
 </style>
