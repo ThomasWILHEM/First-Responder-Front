@@ -44,21 +44,7 @@ export default {
   },
   methods: {
     createVehicle() {
-      axios.post('http://127.0.0.1:8000/vehicles/', this.vehicle)
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-
-      this.vehicle = {
-        coordinates_latitude: 0,
-        coordinates_longitude: 0,
-        type_id: 0,
-        call_id: null,
-        building_id: 0
-      };
+      this.$emit('create-vehicle', this.vehicle);
     }
   }
 };

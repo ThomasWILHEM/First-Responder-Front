@@ -19,22 +19,6 @@
             :building="selectedBuilding"
         />
       </div>
-
-      <!-- <button @click="getCalls">Add call</button>
-      <button @click="toggleAddBuilding">Add building</button>
-          </div>
-          <div id="content">
-            <building-form
-                v-if="addBuilding"
-                :form-data="formData"
-                :type-list="typeList"
-                @submit-form="submitForm">
-            </building-form>
-            <BuildingInfos
-                v-if="selectedBuilding != null"
-                :building="selectedBuilding"
-            >
-            </BuildingInfos>-->
     </div>
   </div>
 </template>

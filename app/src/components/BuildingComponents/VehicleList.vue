@@ -19,17 +19,19 @@
         v-else
         :building="building"
         :vehicle-list="vehiclesList"
+        @create-vehicle="createVehicle"
     />
   </div>
 </template>
 
 <script>
 import VehicleCreationForm from "./VehiclePartComponents/VehicleCreationForm.vue";
+import axios from "axios";
 
 export default {
   components: {VehicleCreationForm},
   props: {
-    vehiclesList: Object,
+    vehiclesList: Array,
     building: Object,
   },
   data(){
@@ -51,6 +53,16 @@ export default {
         this.imageSrc = "src/assets/images/white-minus.png"
         this.isVehicleCreation = true;
       }
+    },
+    createVehicle(vehicle) {
+      console.log("oio");
+      axios.post('http://127.0.0.1:8000/vehicles/', vehicle)
+          .then(response => {
+            this.vehiclesList.push(response.data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
     }
   }
 };
