@@ -1,24 +1,11 @@
 <template>
-  <div>
-    <h2>Créer un nouveau véhicule</h2>
+  <div id="vehicle-creation">
     <form @submit.prevent="createVehicle">
       <div class="form-group">
-        <label for="latitude">Latitude:</label>
-        <input type="number" id="latitude" :value="building.coordinates_latitude" disabled>
-      </div>
-      <div class="form-group">
-        <label for="longitude">Longitude:</label>
-        <input type="number" id="longitude" :value="building.coordinates_longitude" disabled>
-      </div>
-      <div class="form-group">
-        <label for="type_id">Type :</label>
+        <label for="type_id">Type </label>
         <select id="type_id" v-model="vehicle.type_id">
           <option v-for="type in vehicleTypes" :value="type.id">{{ type.name }}</option>
         </select>
-      </div>
-      <div class="form-group">
-        <label for="building_id">Building:</label>
-        <input type="text" id="building" :value="building.name" disabled>
       </div>
       <button type="submit">Buy vehicle</button>
     </form>
@@ -31,6 +18,7 @@ import axios from 'axios';
 export default {
   props: {
     building: Object,
+    vehiclesList: Object,
   },
   data() {
     return {
@@ -77,5 +65,20 @@ export default {
 </script>
 
 <style scoped>
-/* Ajoutez du CSS pour styliser votre formulaire si nécessaire. */
+.form-group{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: 5px;
+}
+
+.form-group label{
+  color: #651f20;
+  font-size: large;
+  font-weight: bold;
+}
+
+#vehicle-creation{
+  margin: 10px;
+}
 </style>

@@ -15,7 +15,6 @@ import TheHeader from "./components/TheHeader.vue";
 header {
   line-height: 1.5;
   max-height: 100vh;
-  margin-bottom: 1vh;
 }
 
 body{

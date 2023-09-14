@@ -1,5 +1,5 @@
 <template>
-  <div id="building-infos">
+  <div id="building-infos" @mousewheel.stop="" @dblclick.stop="">
     <div id="title">
       <label id="name">{{building.name}}</label>
       <label id="type">{{building.type.name}}</label>
@@ -14,20 +14,30 @@
       <div class="info">
         <div>
           <img src="../assets/images/staff.png" alt="Staff">
-          <label>{{this.vehicles.length}} staffs</label>
+          <label>{{this.staffs.length}} staffs</label>
         </div>
         <img @click="toggleStaffList" class="more-infos" :src="staffInfosImgSrc" alt="Infos">
       </div>
       <div class="info">
         <div>
           <img src="../assets/images/vehicle.png" alt="Vehicles">
-          <label>{{this.staffs.length}} vehicles</label>
+          <label>{{this.vehicles.length}} vehicles</label>
         </div>
         <img @click="toggleVehicleList" class="more-infos" :src="vehicleInfosImgSrc" alt="Infos">
       </div>
     </div>
     <div v-if="page !== ''">
-      test
+      <div class="separator"></div>
+      <VehicleList
+          v-if="page === 'vehicle'"
+          :vehicles-list="vehicles"
+          :building="building"
+      />
+      <StaffList
+          v-else-if="page === 'staff'"
+          :staffs-list="staffs"
+          :building="building"
+      />
     </div>
   </div>
 
@@ -202,5 +212,10 @@ export default {
     color: #651f20;
     font-weight: bolder;
     font-size: large;
+  }
+
+  .separator{
+    height: 5px;
+    background-color: #651f20;
   }
 </style>

@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 #building-form {
   position: absolute;
   bottom: 100px;
