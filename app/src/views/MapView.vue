@@ -208,9 +208,6 @@ export default {
   background-color: #651f20;
 }
 
-.map-controls button img{
-  width: 45%;
-}
 
 #page {
   display: flex;

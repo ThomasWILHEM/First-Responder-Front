@@ -185,6 +185,10 @@ export default {
     float: right;
   }
 
+  .info img.more-infos:hover{
+    cursor: pointer;
+  }
+
   .info div{
     max-width: 20lh;
   }

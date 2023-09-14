@@ -1,10 +1,11 @@
 <template>
   <div class="header-content">
-    <img src="../assets/images/logo.png" alt="Logo"/>
+<!--    <img src="../assets/images/logo.png" alt="Logo"/>-->
+    <label id="first">First</label>&nbsp;<label id="responder">Responder</label>
   </div>
 </template>
 
-<style scoped>
+<style>
 .header-content {
   display: flex;
   justify-content: center;
@@ -13,13 +14,28 @@
   width: 100%;
 }
 
-/* Style pour le header */
 header {
   text-align: center;
+  margin: 0;
   padding: 10px;
+  background-color: #211E22;
 }
 
 img{
   height: 2lh;
+}
+
+header label{
+  font-size: xxx-large;
+  font-weight: bolder;
+  font-family: "Inter Semi Bold", "Arial Black",serif;
+}
+
+header #first{
+  color: #f2f2f2;
+}
+
+header #responder{
+  color: #651f20;
 }
 </style>

@@ -20,6 +20,7 @@ header {
 
 body{
   background-color: #fcfcfc;
+  margin: 0;
 }
 
 .logo {
