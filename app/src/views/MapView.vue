@@ -14,6 +14,10 @@
             :type-list="typeList"
             @submit-form="submitForm">
         </building-form>
+        <building-infos
+            v-if="selectedBuilding != null"
+            :building="selectedBuilding"
+        />
       </div>
 
       <!-- <button @click="getCalls">Add call</button>
@@ -63,7 +67,7 @@ export default {
   },
   mounted() {
     this.map = L.map('map').setView([44.5833, -0.0333], 13);
-    console.log(this.selectedBuilding);
+    this.map.zoomControl.remove();
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
