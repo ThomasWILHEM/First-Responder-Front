@@ -1,8 +1,4 @@
 <template>
-<!--  <div v-for="staff in staffsList">
-    {{ staff.firstname }} {{ staff.lastname }} - {{staff.type.name}}
-  </div>-->
-
   <div id="staff-list">
     <div id="title">
       <label>{{ title }}</label>

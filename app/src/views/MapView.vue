@@ -17,6 +17,7 @@
         <building-infos
             v-if="selectedBuilding != null"
             :building="selectedBuilding"
+            @close-infos="closeBuildingInfos"
         />
       </div>
     </div>
@@ -163,6 +164,9 @@ export default {
             console.error('Erreur lors de la requête :', error);
           });
     },
+    closeBuildingInfos(){
+      this.selectedBuilding = null;
+    }
   }
 };
 </script>

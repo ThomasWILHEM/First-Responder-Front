@@ -1,5 +1,6 @@
 <template>
   <div id="building-infos" @mousewheel.stop="" @dblclick.stop="">
+    <img id="closeButton" @click="closeBuildingInfos" src="../assets/images/close.png" alt="Close infos">
     <div id="title">
       <label id="name">{{building.name}}</label>
       <label id="type">{{building.type.name}}</label>
@@ -40,29 +41,6 @@
       />
     </div>
   </div>
-
-<!--  <div>
-    <h1>{{building.name}}</h1>
-    <h3>{{building.type.name}}</h3>
-  </div>
-  <div>
-    <button @click="toggleStaffList">Staff</button>
-    <button @click="toggleVehicleList">Vehicles</button>
-  </div>
-  <div>
-&lt;!&ndash;    <VehicleList
-      v-if="page === 'vehicle'"
-      :vehicles-list="vehicles"
-      :building="building"
-    >
-    </VehicleList>
-    <StaffList
-      v-else-if="page === 'staff'"
-      :staffs-list="staffs"
-      :building="building"
-    >
-    </StaffList>&ndash;&gt;
-  </div>-->
 </template>
 
 <script>
@@ -137,6 +115,9 @@ export default {
         this.page = "staff"
         this.staffInfosImgSrc = "/src/assets/images/minus.png"
       }
+    },
+    closeBuildingInfos(){
+      this.$emit('close-infos');
     }
   }
 };
@@ -218,4 +199,16 @@ export default {
     height: 5px;
     background-color: #651f20;
   }
+
+  #closeButton{
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 40px;
+    height: 40px;
+  }
+  #closeButton:hover{
+    cursor: pointer;
+  }
+
 </style>
