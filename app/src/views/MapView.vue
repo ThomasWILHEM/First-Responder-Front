@@ -22,6 +22,9 @@
       </div>
     </div>
   </div>
+  <button @click="createCall">
+    Spawn Call
+  </button>
 </template>
 
 <script>
@@ -166,6 +169,34 @@ export default {
     },
     closeBuildingInfos(){
       this.selectedBuilding = null;
+    },
+    createCall(){
+      const call = {
+        "coordinates_latitude": parseFloat((Math.random() * (44.58224 - 44.58193) + 44.58193).toFixed(5)),
+        "coordinates_longitude": parseFloat((Math.random() * (-0.03638 - -0.03603) + -0.03603).toFixed(5)),
+        "datetime": "2023-09-25T10:04:32.954Z",
+        "completion_datetime": "2023-09-25T10:04:32.954Z",
+        "scenario_id": 1,
+        "mission_status": "En cours"
+      }
+
+      console.log(call);
+      axios
+          .post('http://127.0.0.1:8000/calls/', call)
+          .then((response) => {
+            const call = response.data;
+            const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
+            marker.bindPopup("  " +
+                "<div>\n" +
+                "    <h2>" + call.scenario.name + "</h2>\n" +
+                "    <p>" + call.scenario.description + "</p>\n" +
+                "  </div>");
+            this.callMarkersLayer.addLayer(marker);
+
+          })
+          .catch((error) => {
+            console.error('Erreur lors de la requête :', error);
+          });
     }
   }
 };
