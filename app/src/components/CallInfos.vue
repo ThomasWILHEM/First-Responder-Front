@@ -20,6 +20,7 @@
           v-if="page === 'listOnScene'"
           :vehicles-on-scene="vehiclesOnCall"
           :other-vehicles="otherVehicles"
+          @send-vehicles="sendVehicles"
       />
     </div>
   </div>
@@ -60,6 +61,30 @@ export default {
             console.log(response.data);
             this.vehiclesOnCall = response.data.vehiclesOnScene;
             this.otherVehicles = response.data.availableVehicles;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
+    sendVehicles(vehiclesToSend){
+      console.log(vehiclesToSend)
+      const data = {
+        "vehicles": vehiclesToSend
+      }
+      axios.post('http://127.0.0.1:8000/vehicles/send_multiple_to_call?call_id=' + this.call.id, data)
+          .then(response => {
+            if(response.status === 200) {
+              vehiclesToSend.forEach(vehicleId => {
+                const index = this.otherVehicles.findIndex(vehicle => vehicle.id === vehicleId);
+                const removedVehicle = this.otherVehicles.splice(index, 1)[0];
+                this.vehiclesOnCall.push(removedVehicle);
+              });
+
+
+
+            }else{
+              console.log("ERROR");
+            }
           })
           .catch(error => {
             console.error('Error:', error);

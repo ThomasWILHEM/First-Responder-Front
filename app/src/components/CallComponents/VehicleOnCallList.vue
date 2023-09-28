@@ -15,10 +15,11 @@
     <div v-else>
       <div v-for="vehicle in otherVehicles" class="staff">
         <label class="vehiclesToChoose">
-          <input type="checkbox" class="checkVehicle">
+          <input type="checkbox" class="checkVehicle" v-model="checkedVehicles[vehicle.id]">
           {{vehicle.type.name}} - {{vehicle.building.name}}
         </label>
       </div>
+      <button id="sendVehicles" @click.prevent="sendVehicles">Send</button>
     </div>
   </div>
 </template>
@@ -31,6 +32,7 @@ export default {
   },
   data(){
     return {
+      checkedVehicles: {},
       isVehicleAddition: false,
       imageSrc: "src/assets/images/plus.png",
       title: "Vehicle On Scene",
@@ -49,6 +51,15 @@ export default {
         this.isVehicleAddition = true;
       }
     },
+    sendVehicles(){
+      const selectedVehicles = [];
+      for (const vehicleId in this.checkedVehicles) {
+        if (this.checkedVehicles[vehicleId]) {
+          selectedVehicles.push(parseInt(vehicleId));
+        }
+      }
+      this.$emit('send-vehicles', selectedVehicles);
+    }
   }
 };
 </script>
@@ -116,6 +127,24 @@ export default {
   }
   .checkVehicle{
     margin-right: 20px;
+  }
+
+  #sendVehicles{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 65px;
+    height: 65px;
+    background-color: #88282A;
+    border-radius: 10%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #sendVehicles:hover{
+    background-color: #651f20;
   }
 
 </style>
