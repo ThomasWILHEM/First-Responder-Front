@@ -1,0 +1,121 @@
+<template>
+  <div id="staff-list">
+    <div id="title">
+      <label>{{ title }}</label>
+      <img @click="toggleVehicleAddition" :src="imageSrc" alt="Add a vehicle">
+
+    </div>
+    <div v-if="!isVehicleAddition" id=list>
+      <div v-for="vehicle in vehiclesOnScene" class="staff">
+        <label>
+          {{vehicle.type.name}} - {{vehicle.building.name}}
+        </label>
+      </div>
+    </div>
+    <div v-else>
+      <div v-for="vehicle in otherVehicles" class="staff">
+        <label class="vehiclesToChoose">
+          <input type="checkbox" class="checkVehicle">
+          {{vehicle.type.name}} - {{vehicle.building.name}}
+        </label>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    vehiclesOnScene: Array,
+    otherVehicles: Array
+  },
+  data(){
+    return {
+      isVehicleAddition: false,
+      imageSrc: "src/assets/images/plus.png",
+      title: "Vehicle On Scene",
+    }
+  },
+  methods: {
+    toggleVehicleAddition(){
+      if (this.isVehicleAddition)
+      {
+        this.title = "Vehicle On Scene"
+        this.imageSrc = "src/assets/images/plus.png"
+        this.isVehicleAddition = false;
+      }else{
+        this.title = "Send vehicles"
+        this.imageSrc = "src/assets/images/white-minus.png"
+        this.isVehicleAddition = true;
+      }
+    },
+  }
+};
+</script>
+
+<style scoped>
+  #staff-list{
+    margin-top: 20px;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    max-height: 20lh;
+  }
+
+  #list{
+    max-height: 16lh;
+    overflow-y: auto;
+  }
+
+  #title{
+    display: flex;
+    flex-direction: row;
+    background-color: #651f20;
+    color: #f2f2f2;
+    padding: 10px 20px;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #title label{
+    font-weight: bolder;
+    font-size: x-large;
+  }
+
+  .staff{
+    display: flex;
+    flex-direction: row;
+    background-color: #651f20;
+    color: #f2f2f2;
+    margin: 10px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 20px;
+    font-weight: bold;
+  }
+
+  .occupants{
+    display: flex;
+    align-items: center;
+  }
+
+  .occupants img{
+    height: 1.5lh;
+    margin-right: 10px;
+  }
+
+  .occupants label {
+    font-weight: bold;
+    font-size: medium;
+  }
+
+  .vehiclesToChoose{
+    display: flex;
+    align-items: center;
+  }
+  .checkVehicle{
+    margin-right: 20px;
+  }
+
+</style>

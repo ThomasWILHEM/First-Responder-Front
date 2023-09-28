@@ -14,10 +14,17 @@
             :type-list="typeList"
             @submit-form="submitForm">
         </building-form>
+
         <building-infos
             v-if="selectedBuilding != null"
             :building="selectedBuilding"
             @close-infos="closeBuildingInfos"
+        />
+
+        <call-infos
+            v-if="selectedCall != null"
+            :call="selectedCall"
+            @close-infos="closeCallInfos"
         />
       </div>
     </div>
@@ -32,9 +39,10 @@ import L from 'leaflet';
 import axios from 'axios';
 import BuildingForm from "../components/BuildingForm.vue";
 import BuildingInfos from "../components/BuildingInfos.vue";
+import CallInfos from "../components/CallInfos.vue";
 
 export default {
-  components: {BuildingInfos, BuildingForm},
+  components: {CallInfos, BuildingInfos, BuildingForm},
   data() {
     return {
       map: null,
@@ -50,7 +58,8 @@ export default {
         type_id: 1,
       },
       typeList: null,
-      selectedBuilding: null
+      selectedBuilding: null,
+      selectedCall: null
     };
   },
   mounted() {
@@ -66,6 +75,7 @@ export default {
     this.buildingMarkersLayer = L.layerGroup().addTo(this.map);
 
     this.getBuildings();
+    this.getCalls();
   },
   methods: {
     getCalls() {
@@ -74,12 +84,12 @@ export default {
             const calls = response.data.results;
             calls.forEach(call => {
               const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
-              marker.bindPopup("  " +
-                  "<div>\n" +
-                  "    <h2>" + call.scenario.name + "</h2>\n" +
-                  "    <p>" + call.scenario.description + "</p>\n" +
-                  "  </div>");
               this.callMarkersLayer.addLayer(marker);
+              console.log("ok");
+              marker.on('click', function(e) {
+                this.selectedCall = call;
+                console.log(this.selectedCall);
+              }.bind(this));
             });
           })
           .catch(error => {
@@ -92,7 +102,6 @@ export default {
             const buildings = response.data.results;
             buildings.forEach(building => {
               const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
-              marker.bindPopup(building.type.name);
               this.buildingMarkersLayer.addLayer(marker);
 
               marker.on('click', function(e) {
@@ -155,7 +164,6 @@ export default {
           .then((response) => {
             const building = response.data;
             const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
-            marker.bindPopup(building.type.name);
             this.buildingMarkersLayer.addLayer(marker);
             this.selectedBuilding = building;
 
@@ -170,6 +178,9 @@ export default {
     closeBuildingInfos(){
       this.selectedBuilding = null;
     },
+    closeCallInfos(){
+      this.selectedCall = null;
+    },
     createCall(){
       const call = {
         "coordinates_latitude": parseFloat((Math.random() * (44.58224 - 44.58193) + 44.58193).toFixed(5)),
@@ -180,17 +191,11 @@ export default {
         "mission_status": "En cours"
       }
 
-      console.log(call);
       axios
           .post('http://127.0.0.1:8000/calls/', call)
           .then((response) => {
             const call = response.data;
             const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
-            marker.bindPopup("  " +
-                "<div>\n" +
-                "    <h2>" + call.scenario.name + "</h2>\n" +
-                "    <p>" + call.scenario.description + "</p>\n" +
-                "  </div>");
             this.callMarkersLayer.addLayer(marker);
 
           })

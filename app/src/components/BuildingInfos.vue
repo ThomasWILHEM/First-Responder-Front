@@ -65,21 +65,8 @@ export default {
   },
   watch:{
     building: function (newBuilding, oldBuilding) {
-      axios.get('http://127.0.0.1:8000/vehicles/from-building/' + this.building.id)
-          .then(response => {
-            this.vehicles = response.data.results;
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-
-      axios.get('http://127.0.0.1:8000/staffs/from-building/' + this.building.id)
-          .then(response => {
-            this.staffs = response.data.results;
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
+      this.getVehicles();
+      this.getStaffs();
       this.page = "";
     },
     page: function (newPage, oldPage){
@@ -96,6 +83,8 @@ export default {
     }
   },
   mounted() {
+    this.getVehicles();
+    this.getStaffs();
   },
   methods: {
     toggleVehicleList(){
@@ -118,6 +107,24 @@ export default {
     },
     closeBuildingInfos(){
       this.$emit('close-infos');
+    },
+    getVehicles(){
+      axios.get('http://127.0.0.1:8000/vehicles/from-building/' + this.building.id)
+          .then(response => {
+            this.vehicles = response.data.results;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
+    getStaffs(){
+      axios.get('http://127.0.0.1:8000/staffs/from-building/' + this.building.id)
+          .then(response => {
+            this.staffs = response.data.results;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
     }
   }
 };
