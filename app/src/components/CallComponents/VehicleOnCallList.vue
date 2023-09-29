@@ -13,13 +13,18 @@
       </div>
     </div>
     <div v-else>
-      <div v-for="vehicle in otherVehicles" class="staff">
-        <label class="vehiclesToChoose">
-          <input type="checkbox" class="checkVehicle" v-model="checkedVehicles[vehicle.id]">
-          {{vehicle.type.name}} - {{vehicle.building.name}}
-        </label>
+      <div v-if="otherVehicles.length === 0" class="vehicleList">
+        <label>No vehicles</label>
       </div>
-      <button id="sendVehicles" @click.prevent="sendVehicles">Send</button>
+      <div v-else class="vehicleList">
+        <div  v-for="vehicle in otherVehicles" class="staff">
+          <label class="vehiclesToChoose">
+            <input type="checkbox" class="checkVehicle" v-model="checkedVehicles[vehicle.id]">
+            {{vehicle.type.name}} - {{vehicle.building.name}}
+          </label>
+        </div>
+        <button id="sendVehicles" @click.prevent="sendVehicles">Send</button>
+      </div>
     </div>
   </div>
 </template>
@@ -145,6 +150,18 @@ export default {
 
   #sendVehicles:hover{
     background-color: #651f20;
+  }
+
+  .vehicleList{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .vehicleList > label {
+    color: #651f20;
+    font-weight: bolder;
+    font-size: large;
   }
 
 </style>
