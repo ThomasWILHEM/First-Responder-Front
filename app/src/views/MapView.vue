@@ -79,9 +79,9 @@ export default {
   },
   methods: {
     getCalls() {
-      axios.get('http://127.0.0.1:8000/calls/')
+      axios.get('http://127.0.0.1:8000/api/calls')
           .then(response => {
-            const calls = response.data.results;
+            const calls = response.data;
             calls.forEach(call => {
               const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
               this.callMarkersLayer.addLayer(marker);
@@ -97,13 +97,12 @@ export default {
           });
     },
     getBuildings() {
-      axios.get('http://127.0.0.1:8000/buildings/')
+      axios.get('http://127.0.0.1:8000/api/buildings')
           .then(response => {
-            const buildings = response.data.results;
+            const buildings = response.data;
             buildings.forEach(building => {
               const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
               this.buildingMarkersLayer.addLayer(marker);
-
               marker.on('click', function(e) {
                 this.selectedBuilding = building;
                 console.log(this.selectedBuilding);
@@ -116,9 +115,9 @@ export default {
     },
     toggleAddBuilding(){
       if (!this.addBuilding) {
-        axios.get('http://127.0.0.1:8000/buildings-types/')
+        axios.get('http://127.0.0.1:8000/api/building-types')
             .then(response => {
-              this.typeList = response.data.results;
+              this.typeList = response.data;
               this.addBuilding = !this.addBuilding;
 
               const center = this.map.getCenter();
@@ -159,10 +158,13 @@ export default {
 
     },
     submitForm() {
+      console.log(this.formData)
       axios
-          .post('http://127.0.0.1:8000/buildings/', this.formData)
+          .post('http://127.0.0.1:8000/api/buildings', this.formData)
           .then((response) => {
             const building = response.data;
+            console.log(building)
+            console.log("test")
             const marker = L.marker([building.coordinates_latitude, building.coordinates_longitude]);
             this.buildingMarkersLayer.addLayer(marker);
             this.selectedBuilding = building;
@@ -192,7 +194,7 @@ export default {
       }
 
       axios
-          .post('http://127.0.0.1:8000/calls/', call)
+          .post('http://127.0.0.1:8000/api/calls', call)
           .then((response) => {
             const call = response.data;
             const marker = L.marker([call.coordinates_latitude, call.coordinates_longitude]);
