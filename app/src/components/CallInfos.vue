@@ -56,11 +56,11 @@ export default {
       this.$emit('close-infos');
     },
     getVehicles(){
-      axios.get('http://127.0.0.1:8000/ressources/call/' + this.call.id)
+      axios.get('http://127.0.0.1:8000/api/calls/' + this.call.id + '/ressources')
           .then(response => {
             console.log(response.data);
-            this.vehiclesOnCall = response.data.vehiclesOnScene;
-            this.otherVehicles = response.data.availableVehicles;
+            this.vehiclesOnCall = response.data.vehicles_on_scene;
+            this.otherVehicles = response.data.vehicles_available;
           })
           .catch(error => {
             console.error('Error:', error);

@@ -8,7 +8,7 @@
     <div v-if="!isVehicleAddition" id=list>
       <div v-for="vehicle in vehiclesOnScene" class="staff">
         <label>
-          {{vehicle.type.name}} - {{vehicle.building.name}}
+          {{vehicle.name}} - {{vehicle.type.name}}
         </label>
       </div>
     </div>
@@ -20,7 +20,7 @@
         <div  v-for="vehicle in otherVehicles" class="staff">
           <label class="vehiclesToChoose">
             <input type="checkbox" class="checkVehicle" v-model="checkedVehicles[vehicle.id]">
-            {{vehicle.type.name}} - {{vehicle.building.name}}
+            {{vehicle.name}} - {{vehicle.type.name}}
           </label>
         </div>
         <button id="sendVehicles" @click.prevent="sendVehicles">Send</button>
