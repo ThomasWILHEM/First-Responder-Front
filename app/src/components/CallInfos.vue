@@ -21,6 +21,7 @@
           :vehicles-on-scene="vehiclesOnCall"
           :other-vehicles="otherVehicles"
           @send-vehicles="sendVehicles"
+          @send-back-vehicles="sendBackVehicle"
       />
     </div>
   </div>
@@ -67,7 +68,6 @@ export default {
           });
     },
     sendVehicles(vehiclesToSend){
-      console.log(vehiclesToSend)
       const data = {
         "vehicles": vehiclesToSend
       }
@@ -79,11 +79,21 @@ export default {
                 const removedVehicle = this.otherVehicles.splice(index, 1)[0];
                 this.vehiclesOnCall.push(removedVehicle);
               });
-
-
-
             }else{
               console.log("ERROR");
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
+    sendBackVehicle(vehicleId){
+      axios.put('http://127.0.0.1:8000/api/vehicles/' + vehicleId + "/quit-call")
+          .then(response => {
+            if(response.status === 200) {
+              const index = this.vehiclesOnCall.findIndex(vehicle => vehicle.id === vehicleId);
+              const removedVehicle = this.vehiclesOnCall.splice(index, 1)[0];
+              this.otherVehicles.push(removedVehicle);
             }
           })
           .catch(error => {

@@ -10,6 +10,9 @@
         <label>
           {{vehicle.name}} - {{vehicle.type.name}}
         </label>
+        <form>
+          <button @click.prevent="sendBackVehicle(vehicle.id)">Quit</button>
+        </form>
       </div>
     </div>
     <div v-else>
@@ -30,6 +33,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
     vehiclesOnScene: Array,
@@ -64,8 +69,12 @@ export default {
         }
       }
       this.$emit('send-vehicles', selectedVehicles);
+    },
+    sendBackVehicle(vehicleId){
+      this.$emit('send-back-vehicles', vehicleId);
     }
-  }
+  },
+
 };
 </script>
 
