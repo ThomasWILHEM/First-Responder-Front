@@ -71,7 +71,7 @@ export default {
       const data = {
         "vehicles": vehiclesToSend
       }
-      axios.post('http://127.0.0.1:8000/vehicles/send_multiple_to_call?call_id=' + this.call.id, data)
+      axios.put('http://127.0.0.1:8000/api/calls/' + this.call.id + '/send_vehicles', data)
           .then(response => {
             if(response.status === 200) {
               vehiclesToSend.forEach(vehicleId => {
