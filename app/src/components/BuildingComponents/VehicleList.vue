@@ -7,7 +7,7 @@
     <div v-if="!isVehicleCreation" id=list>
       <div v-for="vehicle in vehiclesList" class="staff">
         <label>
-          {{vehicle.type.name}}
+          {{vehicle.name}} - {{vehicle.type.name}}
         </label>
         <div class="occupants">
           <img src="../../assets/images/white-staff.png" alt="Address">
@@ -55,7 +55,7 @@ export default {
       }
     },
     createVehicle(vehicle) {
-      axios.post('http://127.0.0.1:8000/vehicles/', vehicle)
+      axios.post('http://127.0.0.1:8000/api/vehicles', vehicle)
           .then(response => {
             this.vehiclesList.push(response.data);
             this.isVehicleCreation = false;

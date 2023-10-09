@@ -49,9 +49,9 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://127.0.0.1:8000/staffs-types/')
+    axios.get('http://127.0.0.1:8000/api/staff-types')
        .then(response => {
-         this.staffTypes = response.data.results;
+         this.staffTypes = response.data;
          this.staff.building_id = this.building.id;
        })
        .catch(error => {

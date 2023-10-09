@@ -2,6 +2,14 @@
   <div id="staff-creation">
     <form @submit.prevent="createVehicle">
       <div class="form-group">
+        <label for="name">Name :</label>
+        <input
+            type="text"
+            id="name"
+            v-model="vehicle.name"
+        />
+      </div>
+      <div class="form-group">
         <label for="type_id">Type </label>
         <select id="type_id" v-model="vehicle.type_id">
           <option v-for="type in vehicleTypes" :value="type.id">{{ type.name }}</option>
@@ -23,6 +31,7 @@ export default {
   data() {
     return {
       vehicle: {
+        name: "",
         coordinates_latitude: 0,
         coordinates_longitude: 0,
         type_id: 0,
@@ -33,9 +42,9 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://127.0.0.1:8000/vehicles-types/')
+    axios.get('http://127.0.0.1:8000/api/vehicle-types')
        .then(response => {
-         this.vehicleTypes = response.data.results;
+         this.vehicleTypes = response.data;
          this.vehicle.building_id = this.building.id;
        })
        .catch(error => {

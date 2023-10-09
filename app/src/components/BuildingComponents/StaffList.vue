@@ -54,7 +54,7 @@ export default {
     },
     createStaff(staff) {
       console.log(staff);
-      axios.post('http://127.0.0.1:8000/staffs/', staff)
+      axios.post('http://127.0.0.1:8000/api/staffs', staff)
           .then(response => {
             this.staffsList.push(response.data);
             this.isStaffCreation = false;

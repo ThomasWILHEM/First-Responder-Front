@@ -109,18 +109,18 @@ export default {
       this.$emit('close-infos');
     },
     getVehicles(){
-      axios.get('http://127.0.0.1:8000/vehicles/from-building/' + this.building.id)
+      axios.get('http://127.0.0.1:8000/api/buildings/' + this.building.id + '/vehicles')
           .then(response => {
-            this.vehicles = response.data.results;
+            this.vehicles = response.data;
           })
           .catch(error => {
             console.error('Error:', error);
           });
     },
     getStaffs(){
-      axios.get('http://127.0.0.1:8000/staffs/from-building/' + this.building.id)
+      axios.get('http://127.0.0.1:8000/api/buildings/' + this.building.id + '/staffs')
           .then(response => {
-            this.staffs = response.data.results;
+            this.staffs = response.data;
           })
           .catch(error => {
             console.error('Error:', error);
